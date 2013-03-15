@@ -6,26 +6,24 @@
 @interface UIWebViewAttributes : NSObject
 @property (nonatomic, assign) id<UIWebViewDelegate> delegate;
 @property (nonatomic, retain) NSURLRequest *request;
-@property (nonatomic, assign) BOOL loading, logging, allowsInlineMediaPlayback, scalesPageToFit, canGoBack, canGoForward;
+@property (nonatomic, assign) BOOL loading, logging, allowsInlineMediaPlayback, mediaPlaybackRequiresUserAction, scalesPageToFit, canGoBack, canGoForward;
 @property (nonatomic, retain) NSMutableArray *javaScripts;
 @property (nonatomic, retain) NSMutableDictionary *returnValueBlocksByJavaScript;
 @property (nonatomic, retain) NSString *loadedHTMLString;
 @property (nonatomic, retain) NSURL *loadedBaseURL;
 @property (nonatomic, assign) UIDataDetectorTypes dataDetectorTypes;
+@property (nonatomic, retain) UIScrollView *scrollView;
 @end
 
 @implementation UIWebViewAttributes
-@synthesize delegate = delegate_, request = request_, loading = loading_, logging = logging_,
-    javaScripts = javaScripts_, returnValueBlocksByJavaScript = returnValueBlocksByJavaScript_,
-    loadedHTMLString = loadedHTMLString_, loadedBaseURL = loadedBaseURL_, scalesPageToFit = _scalesPageToFit,
-    allowsInlineMediaPlayback = allowsInlineMediaPlayback_, dataDetectorTypes = dataDetectorTypes_,
-    canGoBack = _canGoBack, canGoForward = _canGoForward;
 
 - (id)init {
     if (self = [super init]) {
         self.javaScripts = [NSMutableArray array];
         self.returnValueBlocksByJavaScript = [NSMutableDictionary dictionary];
         self.dataDetectorTypes = UIDataDetectorTypePhoneNumber;
+        self.scrollView = [[[UIScrollView alloc] init] autorelease];
+        self.mediaPlaybackRequiresUserAction = YES;
     }
     return self;
 }
@@ -36,6 +34,7 @@
     self.request = nil;
     self.returnValueBlocksByJavaScript = nil;
     self.javaScripts = nil;
+    self.scrollView = nil;
     [super dealloc];
 }
 @end
@@ -125,6 +124,14 @@ static char ASSOCIATED_ATTRIBUTES_KEY;
     self.attributes.allowsInlineMediaPlayback = allowed;
 }
 
+- (BOOL)mediaPlaybackRequiresUserAction {
+    return self.attributes.mediaPlaybackRequiresUserAction;
+}
+
+- (void)setMediaPlaybackRequiresUserAction:(BOOL)userActionRequired {
+    self.attributes.mediaPlaybackRequiresUserAction = userActionRequired;
+}
+
 - (BOOL)scalesPageToFit {
     return self.attributes.scalesPageToFit;
 }
@@ -147,6 +154,11 @@ static char ASSOCIATED_ATTRIBUTES_KEY;
 
 - (UIDataDetectorTypes)dataDetectorTypes {
     return self.attributes.dataDetectorTypes;
+}
+
+- (UIScrollView *)scrollView
+{
+    return self.attributes.scrollView;
 }
 
 #pragma mark Method overrides

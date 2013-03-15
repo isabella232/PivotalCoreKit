@@ -37,6 +37,7 @@
 		AE3847B8168BA3B500C99B55 /* UIImage+PivotalCore.m in Sources */ = {isa = PBXBuildFile; fileRef = AEBCCBD0168B96C80056EE83 /* UIImage+PivotalCore.m */; };
 		AE3847B9168BA3B500C99B55 /* UIView+PivotalCore.m in Sources */ = {isa = PBXBuildFile; fileRef = AEBCCBD2168B96C80056EE83 /* UIView+PivotalCore.m */; };
 		AE3847BD168BACEB00C99B55 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBCCC39168B99ED0056EE83 /* CoreGraphics.framework */; };
+		AE60D89F16F3E2A300A4B67F /* libCedar-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBCCC07168B98110056EE83 /* libCedar-StaticLib.a */; };
 		AEBCCC25168B999F0056EE83 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBCCBE7168B97DD0056EE83 /* Foundation.framework */; };
 		AEBCCC37168B99ED0056EE83 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBCCC36168B99ED0056EE83 /* UIKit.framework */; };
 		AEBCCC38168B99ED0056EE83 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBCCBE7168B97DD0056EE83 /* Foundation.framework */; };
@@ -56,7 +57,6 @@
 		AEBCCC9C168B9C530056EE83 /* UIView+PivotalCoreSpec.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEBCCC95168B9C530056EE83 /* UIView+PivotalCoreSpec.mm */; };
 		AEBCCC9D168B9C530056EE83 /* UIWebViewSpec+Spec.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEBCCC96168B9C530056EE83 /* UIWebViewSpec+Spec.mm */; };
 		AEBCCC9E168B9C530056EE83 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = AEBCCC97168B9C530056EE83 /* main.m */; };
-		AEBCCCA1168B9C7E0056EE83 /* libCedar-StaticLib.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AEBCCC07168B98110056EE83 /* libCedar-StaticLib.a */; };
 		AEC6D7FE16963F3500E10C7B /* UIControlSpec+Spec.mm in Sources */ = {isa = PBXBuildFile; fileRef = AEC6D7FD16963F3500E10C7B /* UIControlSpec+Spec.mm */; };
 		B866FC1816B4957500317E32 /* UIActionSheet+Spec.h in Copy headers to framework */ = {isa = PBXBuildFile; fileRef = AEBCCC71168B9B5F0056EE83 /* UIActionSheet+Spec.h */; };
 		B866FC1916B4957500317E32 /* UIAlertView+Spec.h in Copy headers to framework */ = {isa = PBXBuildFile; fileRef = AEBCCC73168B9B5F0056EE83 /* UIAlertView+Spec.h */; };
@@ -86,6 +86,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = AEBCCC23168B999F0056EE83;
 			remoteInfo = "UIKit+PivotalCore-StaticLib";
+		};
+		AE60D89D16F3E29B00A4B67F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AEBCCBF4168B98100056EE83 /* Cedar.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = AEEE222811DC2B0600029872;
+			remoteInfo = "Cedar-StaticLib";
 		};
 		AEBCCC00168B98110056EE83 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -142,13 +149,6 @@
 			proxyType = 2;
 			remoteGlobalIDString = 96158A86144A915E005895CE;
 			remoteInfo = OCUnitAppLogicTests;
-		};
-		AEBCCC9F168B9C710056EE83 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = AEBCCBF4168B98100056EE83 /* Cedar.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = AEEE222811DC2B0600029872;
-			remoteInfo = "Cedar-StaticLib";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -262,9 +262,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AE60D89F16F3E2A300A4B67F /* libCedar-StaticLib.a in Frameworks */,
 				AE3847B6168BA2DE00C99B55 /* libUIKit+PivotalCore-StaticLib.a in Frameworks */,
 				AE3847B3168BA28900C99B55 /* libUIKit+PivotalSpecHelper-StaticLib.a in Frameworks */,
-				AEBCCCA1168B9C7E0056EE83 /* libCedar-StaticLib.a in Frameworks */,
 				AEBCCC37168B99ED0056EE83 /* UIKit.framework in Frameworks */,
 				AEBCCC38168B99ED0056EE83 /* Foundation.framework in Frameworks */,
 				AE3847BD168BACEB00C99B55 /* CoreGraphics.framework in Frameworks */,
@@ -483,9 +483,9 @@
 			buildRules = (
 			);
 			dependencies = (
+				AE60D89E16F3E29B00A4B67F /* PBXTargetDependency */,
 				AE3847B5168BA2DA00C99B55 /* PBXTargetDependency */,
 				AE3847B2168BA27D00C99B55 /* PBXTargetDependency */,
-				AEBCCCA0168B9C710056EE83 /* PBXTargetDependency */,
 			);
 			name = "UIKit-StaticLibSpec";
 			productName = "UIKit+PivotalCore-StaticLibSpec";
@@ -707,10 +707,10 @@
 			target = AEBCCC23168B999F0056EE83 /* UIKit+PivotalCore-StaticLib */;
 			targetProxy = AE3847B4168BA2DA00C99B55 /* PBXContainerItemProxy */;
 		};
-		AEBCCCA0168B9C710056EE83 /* PBXTargetDependency */ = {
+		AE60D89E16F3E29B00A4B67F /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = "Cedar-StaticLib";
-			targetProxy = AEBCCC9F168B9C710056EE83 /* PBXContainerItemProxy */;
+			targetProxy = AE60D89D16F3E29B00A4B67F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 

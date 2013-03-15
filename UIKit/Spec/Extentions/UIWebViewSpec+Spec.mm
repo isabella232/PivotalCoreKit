@@ -226,6 +226,12 @@ describe(@"UIWebView (spec extensions)", ^{
             });
         });
     });
+    
+    describe(@"the scroll view", ^{
+        it(@"should have one", ^{
+            webView.scrollView should_not be_nil;
+        });
+    });
 
     describe(@"scalesPageToFit", ^{
         it(@"should not blow up", ^{
@@ -292,7 +298,25 @@ describe(@"UIWebView (spec extensions)", ^{
             expect(webView.allowsInlineMediaPlayback).to(be_truthy());
         });
     });
+    
+    describe(@"mediaPlaybackRequiresUserAction", ^{
+        it(@"should not explode, however quietly", ^{
+            [webView mediaPlaybackRequiresUserAction];
+        });
+    });
+    
+    describe(@"setMediaPlaybackRequiresUserAction", ^{
+        beforeEach(^{
+            webView.mediaPlaybackRequiresUserAction should equal(YES);
+            webView.mediaPlaybackRequiresUserAction = NO;
+        });
+        
+        it(@"should return the previously set value", ^{
+            webView.mediaPlaybackRequiresUserAction should equal(NO);
+        });
+    });
 
+    
     describe(@"loadHTMLString:baseURL:", ^{
         NSString *html = @"some HTML";
         NSURL *baseURL = [NSURL URLWithString:@"a-path"];
