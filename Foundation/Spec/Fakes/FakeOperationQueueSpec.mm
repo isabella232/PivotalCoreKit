@@ -44,6 +44,29 @@ describe(@"FakeOperationQueue", ^{
         });
     });
 
+    describe(@"when set to run synchronously", ^{
+        beforeEach(^{
+            fakeQueue.runSynchronously = YES;
+        });
+
+        it(@"should run operations immediately when added", ^{
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            __block BOOL blockInvoked = NO;
+
+            NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:^{
+                blockInvoked = YES;
+                dispatch_semaphore_signal(semaphore);
+            }];
+
+            [fakeQueue addOperation:blockOperation];
+            dispatch_semaphore_wait(semaphore, 0.001);
+
+            blockInvoked should be_truthy;
+
+            dispatch_release(semaphore);
+        });
+    });
+
     describe(@"when an array of operations are added", ^{
         __block NSArray *operations;
         __block NSString *message;
@@ -72,6 +95,41 @@ describe(@"FakeOperationQueue", ^{
 
             it(@"should not have any operations when finished", ^{
                 fakeQueue.operations should be_empty;
+            });
+        });
+    });
+
+    describe(@"-runNextOperation", ^{
+        context(@"when there are operations to be run", ^{
+            __block NSString *message = nil;
+            beforeEach(^{
+                [fakeQueue addOperationWithBlock:^{
+                    message = @"Hi Mom";
+                }];
+
+                [fakeQueue addOperationWithBlock:^{
+                    message = @"Hi Dad";
+                }];
+            });
+
+            it(@"should run the next operation and remove it from the queue", ^{
+                [fakeQueue runNextOperation];
+                message should equal(@"Hi Mom");
+                fakeQueue.operationCount should equal(1);
+
+                [fakeQueue runNextOperation];
+                message should equal(@"Hi Dad");
+                fakeQueue.operationCount should equal(0);
+            });
+        });
+
+        context(@"when the queue is empty", ^{
+            beforeEach(^{
+                fakeQueue.operationCount should equal(0);
+            });
+
+            it(@"should raise an exception", ^{
+                ^{ [fakeQueue runNextOperation]; } should raise_exception;
             });
         });
     });

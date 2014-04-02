@@ -24,28 +24,34 @@
 }
 
 - (void)addOperation:(NSOperation *)op {
-    [self.mutableOperations addObject:op];
+    if (self.runSynchronously) {
+        [self performOperationAndWait:op];
+    } else {
+        [self.mutableOperations addObject:op];
+    }
 }
 
-- (void)addOperations:(NSArray *)ops waitUntilFinished:(BOOL)wait {
-    for (id op in ops) {
-        if ([op isKindOfClass:[NSOperation class]]) {
-            [self.mutableOperations addObject:op];
+- (void)addOperations:(NSArray *)operations waitUntilFinished:(BOOL)wait {
+    for (id operation in operations) {
+        if (![operation isKindOfClass:[NSOperation class]]) {
+            operation = [NSBlockOperation blockOperationWithBlock:[[operation copy] autorelease]];
+        }
+
+        if (wait) {
+            [self performOperationAndWait:operation];
         } else {
-            [self.mutableOperations addObject:[NSBlockOperation blockOperationWithBlock:op]];
+            [self.mutableOperations addObject:operation];
         }
-    }
-    if (wait) {
-        for (NSOperation *op in self.mutableOperations) {
-            [self executeOperationAndWait:op];
-        }
-        [self.mutableOperations removeAllObjects];
     }
 }
 
 - (void)addOperationWithBlock:(void (^)(void))block {
     NSBlockOperation *blockOperation = [NSBlockOperation blockOperationWithBlock:[[block copy] autorelease]];
-    [self.mutableOperations addObject:blockOperation];
+    if (self.runSynchronously) {
+        [self performOperationAndWait:blockOperation];
+    } else {
+        [self.mutableOperations addObject:blockOperation];
+    }
 }
 
 - (NSArray *)operations {
@@ -56,18 +62,22 @@
     return self.mutableOperations.count;
 }
 
-- (void)executeOperationAndWait:(NSOperation *)op {
+- (void)performOperationAndWait:(NSOperation *)op {
     [op start];
     [op waitUntilFinished];
 }
 
-- (void)runOperationAtIndex:(NSUInteger)index {
-    id op = [self.mutableOperations objectAtIndex:index];
-    if ([op isKindOfClass:[NSOperation class]]) {
-        [self executeOperationAndWait:op];
-    } else {
-        ((void (^)())op)();
+- (void)runNextOperation {
+    if (self.mutableOperations.count == 0) {
+        [[NSException exceptionWithName:NSInternalInconsistencyException reason:@"Can't run an operation that doesn't exist" userInfo:nil] raise];
     }
+    id operation = [self.mutableOperations objectAtIndex:0];
+    if ([operation isKindOfClass:[NSOperation class]]) {
+        [self performOperationAndWait:operation];
+    } else {
+        ((void (^)())operation)();
+    }
+    [self.mutableOperations removeObject:operation];
 }
 
 @end

@@ -3,9 +3,9 @@
 
 @interface Target : NSObject
 
-@property (nonatomic) BOOL wasCalled;
 
-- (void)callMe;
-
+- (IBAction)hello;
+- (void)goodbye;
+- (void)ciao:(id)bella;
 @end
 

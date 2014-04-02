@@ -7,21 +7,6 @@ using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
 
-void (^expectFailureWithMessage)(NSString *, CDRSpecBlock) = ^(NSString *message, CDRSpecBlock block) {
-    @try {
-        block();
-    }
-    @catch (NSException *x) {
-        if (![message isEqualToString:x.reason]) {
-            NSString *reason = [NSString stringWithFormat:@"Expected failure message: <%@> but received failure message <%@>", message, x.reason];
-            [[CDRSpecFailure specFailureWithReason:reason] raise];
-        }
-        return;
-    }
-
-    fail(@"Expectation should have failed.");
-};
-
 SPEC_BEGIN(UIControl_SpecSpec)
 
 describe(@"UIControlSpec", ^{
@@ -30,8 +15,10 @@ describe(@"UIControlSpec", ^{
 
     beforeEach(^{
         target = [[[Target alloc] init] autorelease];
+        spy_on(target);
+
         button = [UIButton buttonWithType:UIButtonTypeCustom];
-        [button addTarget:target action:@selector(callMe) forControlEvents:UIControlEventTouchUpInside];
+        [button addTarget:target action:@selector(hello) forControlEvents:UIControlEventTouchUpInside];
     });
 
     describe(@"-tap", ^{
@@ -43,7 +30,7 @@ describe(@"UIControlSpec", ^{
         context(@"when visible and enabled", ^{
             it(@"should send control actions", ^{
                 [button tap];
-                target.wasCalled should be_truthy;
+                target should have_received(@selector(hello));
             });
         });
 
@@ -62,7 +49,7 @@ describe(@"UIControlSpec", ^{
                 @try {
                     [button tap];
                 } @catch(NSException *e) { }
-                target.wasCalled should equal(NO);
+                target should_not have_received(@selector(hello));
             });
         });
 
@@ -81,7 +68,7 @@ describe(@"UIControlSpec", ^{
                 @try {
                     [button tap];
                 } @catch(NSException *e) { }
-                target.wasCalled should equal(NO);
+                target should_not have_received(@selector(hello));
             });
         });
     });

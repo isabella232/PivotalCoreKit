@@ -1,7 +1,11 @@
 #import <Foundation/Foundation.h>
 
 @interface FakeOperationQueue : NSOperationQueue
+
+@property (nonatomic) BOOL runSynchronously;
+
 - (void)reset;
-- (void)runOperationAtIndex:(NSUInteger)index;
+- (void)runNextOperation;
+
 @end
 
