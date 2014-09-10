@@ -1,12 +1,13 @@
 Pod::Spec.new do |s|
   s.name     = 'PivotalCoreKit'
-  s.version  = '0.0.3'
+  s.version  = '0.1.0'
   s.license  = { :type => 'MIT', :file => 'LICENSE.markdown' }
   s.summary  = 'Shared library and test code for iOS projects.'
   s.homepage = 'https://github.com/pivotal/PivotalCoreKit'
   s.author   = { 'Pivotal Labs' => 'http://pivotallabs.com' }
-  s.source   = { :git => 'https://github.com/pivotal/PivotalCoreKit.git', :tag => 'v0.0.3' }
-  s.platform = :ios, '5.0'
+  s.source   = { :git => 'https://github.com/pivotal/PivotalCoreKit.git' }
+  s.platform = :ios, '6.0'
+  s.requires_arc = false
 
   s.default_subspec = 'Core'
 
@@ -30,7 +31,13 @@ Pod::Spec.new do |s|
 
   s.subspec 'UIKit' do |ui|
     ui.subspec 'Core' do |uicore|
+      arc_files = 'UIKit/Core/Extensions/UIView+PCKNibHelpers.m'
       uicore.source_files = 'UIKit/Core/**/*.{h,m}'
+      uicore.exclude_files = arc_files
+      uicore.subspec 'Core-arc' do |core_arc|
+        core_arc.requires_arc = true
+        core_arc.source_files = arc_files
+      end
     end
 
     ui.subspec 'SpecHelper' do |spec|
@@ -43,7 +50,12 @@ Pod::Spec.new do |s|
       end
 
       spec.subspec 'Stubs' do |stub|
+        stub.requires_arc = true
         stub.source_files = ['UIKit/SpecHelper/Stubs/*.{h,m}', 'UIKit/SpecHelper/UIKit+PivotalSpecHelperStubs.h']
+      end
+
+      spec.subspec 'Helpers' do |helper|
+	helper.source_files = ['UIKit/SpecHelper/Helpers/*.{h,m}']
       end
     end
   end
@@ -57,7 +69,7 @@ Pod::Spec.new do |s|
 
     f.subspec 'SpecHelper' do |spec_helper|
       spec_helper.subspec 'Extensions' do |ext|
-        ext.source_files = ['Foundation/Core/Extensions/NSObject+MethodRedirection.h', 'Foundation/SpecHelper/Helpers/PCKConnectionBlockDelegate.h', 'Foundation/SpecHelper/Helpers/PCKConnectionDelegateWrapper.h', 'Foundation/SpecHelper/Fakes/PSHKFakeHTTPURLResponse.h', 'Foundation/SpecHelper/Fakes/FakeOperationQueue.h', 'Foundation/SpecHelper/Extensions/*.{h,m}']
+        ext.source_files = ['Foundation/SpecHelper/Foundation+PivotalSpecHelper.h', 'Foundation/Core/Extensions/NSObject+MethodRedirection.h', 'Foundation/SpecHelper/Helpers/PCKConnectionBlockDelegate.h', 'Foundation/SpecHelper/Helpers/PCKConnectionDelegateWrapper.h', 'Foundation/SpecHelper/Fakes/PSHKFakeHTTPURLResponse.h', 'Foundation/SpecHelper/Fakes/FakeOperationQueue.h', 'Foundation/SpecHelper/Extensions/*.{h,m}']
       end
 
       spec_helper.subspec 'Fixtures' do |fix|

@@ -14,7 +14,6 @@ describe(@"UIView+Spec", ^{
     __block Target *otherTarget;
 
     beforeEach(^{
-        [UIGestureRecognizer whitelistClassForGestureSnooping:[Target class]];
         view = [[[UIView alloc] init] autorelease];
         target = [[[Target alloc] init] autorelease];
         spy_on(target);
@@ -104,6 +103,28 @@ describe(@"UIView+Spec", ^{
             [view subviewWithAccessibilityIdentifier:@"I, Robot"] should equal(subview1);
             [view subviewWithAccessibilityIdentifier:@"Foundation"] should equal(subview2);
             [view subviewWithAccessibilityIdentifier:@"Kryten"] should be_nil;
+        });
+    });
+
+    describe(@"finding the first subview of a class", ^{
+        __block UIView *view;
+        __block UIView *subview1;
+        __block UILabel *subview2;
+        __block UILabel *subsubview;
+
+        beforeEach(^{
+            view = [[[UIView alloc] init] autorelease];
+            subview1 = [[[UIView alloc] init] autorelease];
+            subview2 = [[[UILabel alloc] init] autorelease];
+            subsubview = [[[UILabel alloc] init] autorelease];
+
+            [view addSubview:subview1];
+            [view addSubview:subview2];
+            [subview1 addSubview:subsubview];
+        });
+
+        it(@"should return the closest subview in the tree that is of the given class", ^{
+            [view firstSubviewOfClass:[UILabel class]] should equal(subview2);
         });
     });
 });

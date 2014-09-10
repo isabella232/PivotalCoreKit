@@ -5,7 +5,7 @@
 using namespace Cedar::Matchers;
 using namespace Cedar::Doubles;
 
-SPEC_BEGIN(UIViewControllerSpec)
+SPEC_BEGIN(UIViewControllerSpecExtensionsSpec)
 
 describe(@"UIViewController (spec extensions)", ^{
     __block UIViewController *controller, *childController;
@@ -110,6 +110,8 @@ describe(@"UIViewController (spec extensions)", ^{
         });
     });
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     describe(@"presenting modal view controllers (deprecated APIs)", ^{
         beforeEach(^{
             [controller presentModalViewController:modalController animated:YES];
@@ -147,6 +149,7 @@ describe(@"UIViewController (spec extensions)", ^{
             });
         });
     });
+#pragma clang diagnostic pop
 });
 
 SPEC_END
