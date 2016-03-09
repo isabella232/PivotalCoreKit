@@ -1,5 +1,6 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
+#pragma clang diagnostic ignored "-Wnonnull"
 #import "objc/runtime.h"
 #import "NSURLConnection+Spec.h"
 #import "PSHKFakeHTTPURLResponse.h"
@@ -265,3 +266,5 @@ static FakeOperationQueue *connectionsQueue__;
 }
 
 @end
+
+#pragma clang diagnostic pop
